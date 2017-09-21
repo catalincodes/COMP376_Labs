@@ -20,12 +20,18 @@ public class Mario : MonoBehaviour
     bool mMoving;
     bool mGrounded;
     bool mFalling;
+    bool mJumping;
 
     // References to other components (can be from other game objects!)
     Animator mAnimator;
     Rigidbody2D mRigidBody2D;
     Transform mSpriteChild;
     Transform mGroundCheck;
+
+    // used to change direction
+    Vector2 currentDirection = new Vector2(0, 0);
+    float horizontalDirection = 0.0f;
+    Vector3 updatedPosition;
 
     void Start ()
     {
@@ -39,12 +45,17 @@ public class Mario : MonoBehaviour
     void Update ()
     {
         CheckGrounded ();
+        CheckFalling();
+        CheckJumping();
+        CheckRunning();
         MoveCharacter ();
-        CheckFalling ();
+        
 
         // Update animator's variables
         mAnimator.SetBool("isRunning", mRunning);
         mAnimator.SetBool("isMoving", mMoving);
+        mAnimator.SetBool("isJumping", mJumping);
+        mAnimator.SetBool("IsFalling", mFalling);
 
         // TODO: Tell animator if game object is grounded or not (use the variable "mGrounded")
 
@@ -69,7 +80,32 @@ public class Mario : MonoBehaviour
     {
         // TODO: Check if the player wants Mario to run (see input manager)
         //       and set the value of "mRunning" accordingly
+        currentDirection.x = 0;
+        
+        horizontalDirection = Input.GetAxisRaw("Horizontal");
 
+        if (horizontalDirection != 0.0f)
+        {
+            mMoving = true;
+            UpdateHorizontalPosition();
+            UpdateFaceDirection();
+        }
+        else
+        {
+            mMoving = false;
+        }
+        
+
+        if (Input.GetKeyDown(KeyCode.Space) && mGrounded)
+        {
+            currentDirection.y = mJumpForce;
+            mRigidBody2D.AddForce(currentDirection);
+        }
+
+        //FaceDirection(new Vector2(dir,0));
+
+        
+                
 
         // TODO: Make Mario move when the player presses Left or Right!
         //       Also, move Mario walk/run at the appropriate speed.
@@ -80,9 +116,36 @@ public class Mario : MonoBehaviour
         //       Make use of the "mGrounded" variable, whose value is being changed by the CheckGrounded() function
     }
 
+    /// <summary>
+    /// Updates FaceDirection
+    /// </summary>
+    private void UpdateFaceDirection()
+    {
+        currentDirection.x = horizontalDirection;
+        currentDirection.y = 0;
+        FaceDirection(currentDirection);
+    }
+
+    private void UpdateHorizontalPosition()
+    {
+        Vector3 updatedPosition = transform.position;
+        updatedPosition.x += horizontalDirection * (mRunning ? mRunSpeed : mWalkSpeed) * Time.deltaTime;
+        transform.position = updatedPosition;
+    }
+
     private void CheckFalling()
     {
         mFalling = mRigidBody2D.velocity.y < 0.0f;
+    }
+
+    private void CheckRunning()
+    {
+        mRunning = Input.GetKey(KeyCode.LeftShift);
+    }
+
+    private void CheckJumping()
+    {
+        mJumping = mRigidBody2D.velocity.y > 0.0f;
     }
 
     private void FaceDirection(Vector2 direction)
@@ -92,3 +155,5 @@ public class Mario : MonoBehaviour
         mSpriteChild.rotation = rotation3D;
     }
 }
+
+
