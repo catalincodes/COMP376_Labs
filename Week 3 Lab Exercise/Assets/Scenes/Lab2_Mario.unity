@@ -825,7 +825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mWalkSpeed: 2
-  mRunSpeed: 5
+  mRunSpeed: 3.75
   mJumpForce: 300
   mWhatIsGround:
     serializedVersion: 2

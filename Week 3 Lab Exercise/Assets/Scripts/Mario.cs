@@ -84,6 +84,11 @@ public class Mario : MonoBehaviour
         
         horizontalDirection = Input.GetAxisRaw("Horizontal");
 
+        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && mGrounded)
+        {
+            mRunning = true;
+        }
+
         if (horizontalDirection != 0.0f)
         {
             mMoving = true;
@@ -102,10 +107,13 @@ public class Mario : MonoBehaviour
             mRigidBody2D.AddForce(currentDirection);
         }
 
+
+
+
         //FaceDirection(new Vector2(dir,0));
 
-        
-                
+
+
 
         // TODO: Make Mario move when the player presses Left or Right!
         //       Also, move Mario walk/run at the appropriate speed.
