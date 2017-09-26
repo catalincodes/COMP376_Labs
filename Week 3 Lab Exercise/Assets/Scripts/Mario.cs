@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Mario : MonoBehaviour
 {
+
+    enum State { Idle =0, Moving =1,  Running = 2, Jumping =3 };
+    State mOriginalState = State.Idle;
+
     // Variables set in the inspector
     [SerializeField]
     float mWalkSpeed;
@@ -55,7 +59,8 @@ public class Mario : MonoBehaviour
         mAnimator.SetBool("isRunning", mRunning);
         mAnimator.SetBool("isMoving", mMoving);
         mAnimator.SetBool("isJumping", mJumping);
-        mAnimator.SetBool("IsFalling", mFalling);
+        mAnimator.SetBool("isFalling", mFalling);
+        mAnimator.SetInteger("originalState", (int)mOriginalState);
 
         // TODO: Tell animator if game object is grounded or not (use the variable "mGrounded")
 
@@ -89,14 +94,25 @@ public class Mario : MonoBehaviour
             mRunning = true;
         }
 
+
         if (horizontalDirection != 0.0f)
         {
             mMoving = true;
+            if (mRunning)
+            {
+                mOriginalState = State.Running;
+            }
+            else
+            {
+                mOriginalState = State.Moving;
+            }
+
             UpdateHorizontalPosition();
             UpdateFaceDirection();
         }
         else
         {
+            mOriginalState = State.Idle;
             mMoving = false;
         }
         
@@ -162,6 +178,7 @@ public class Mario : MonoBehaviour
         Quaternion rotation3D = direction == Vector2.right ? Quaternion.LookRotation(Vector3.forward) : Quaternion.LookRotation(Vector3.back); 
         mSpriteChild.rotation = rotation3D;
     }
+
 }
 
 
