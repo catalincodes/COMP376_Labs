@@ -25,7 +25,6 @@ public class FollowTarget : MonoBehaviour
             float distanceBetweenTargetAndUnit = Vector2.Distance(mTarget.position, this.transform.position);
             if ((distanceBetweenTargetAndUnit > mArriveThreshold) && (distanceBetweenTargetAndUnit < mFollowRange))
             {
-                Debug.Log("Attack!!!");
                 EnemyTransform.position = Vector2.MoveTowards(EnemyTransform.position, mTarget.position, mArriveThreshold);
             }
             
