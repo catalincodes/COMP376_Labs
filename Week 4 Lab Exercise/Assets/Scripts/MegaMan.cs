@@ -115,6 +115,11 @@ public class MegaMan : MonoBehaviour
 
     public void Die()
     {
+        GameObject particles = Instantiate(mDeathParticleEmitter, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform);
+
+        Destroy(this);
+        
+
         // TODO: Instantiate the particle effects "mDeathParticleEmitter"
         //       and destroy the "Mega Man" game object
     }

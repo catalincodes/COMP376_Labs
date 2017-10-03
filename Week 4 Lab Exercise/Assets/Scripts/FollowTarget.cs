@@ -12,12 +12,23 @@ public class FollowTarget : MonoBehaviour
 
     float mArriveThreshold = 0.05f;
 
+    private Transform EnemyTransform;
+    void Start()
+    {
+        EnemyTransform = GetComponentInParent<Transform>();
+    }
+
     void Update ()
     {
         if(mTarget != null)
         {
-            // TODO: Make the enemy follow the target "mTarget"
-            //       only if the target is close enough (distance smaller than "mFollowRange")
+            float distanceBetweenTargetAndUnit = Vector2.Distance(mTarget.position, this.transform.position);
+            if ((distanceBetweenTargetAndUnit > mArriveThreshold) && (distanceBetweenTargetAndUnit < mFollowRange))
+            {
+                Debug.Log("Attack!!!");
+                EnemyTransform.position = Vector2.MoveTowards(EnemyTransform.position, mTarget.position, mArriveThreshold);
+            }
+            
         }
     }
 
