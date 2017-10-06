@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ReturnToMenu : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class ReturnToMenu : MonoBehaviour
     {
         if(Input.GetButtonDown ("Cancel"))
         {
-            Application.LoadLevel (0);
+			SceneManager.LoadScene (0);
         }
     }
 }
